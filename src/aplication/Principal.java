@@ -38,13 +38,11 @@ public class Principal {
 			System.out.print("DATA DE SAIDA(dd/MM/yyyy): ");
 			saida = sdf.parse(sc.next());
 			
-			Date agora = new Date();
-			if(entrada.before(agora) || saida.before(agora)) {
-				System.out.println("erro a atualização é somente para datas futuras");
-			}else if(!saida.after(entrada)) {
-				System.out.println("DATA INVALIDA");
-			}else{
-			reserva.atualizar(entrada, saida);
+		
+			String error = reserva.atualizar(entrada, saida);
+			if(error != null) {
+				System.out.println("Erro na reserva: "+ error);
+			}else {
 			System.out.println(reserva);
 			}
 		}
