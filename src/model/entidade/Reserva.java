@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reserva {
 	private Integer Nquarto;
 	private Date entrada;
@@ -11,7 +13,10 @@ public class Reserva {
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Reserva(Integer nquarto, Date entrada, Date saida) {
+	public Reserva(Integer nquarto, Date entrada, Date saida) throws DomainException {
+	if(!saida.after(entrada)) {
+		throw new DomainException("DATA INVALIDA");
+	}
 		Nquarto = nquarto;
 		this.entrada = entrada;
 		this.saida = saida;
@@ -38,16 +43,15 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(dias, TimeUnit.MILLISECONDS);
 	}
 	
-	public String atualizar(Date entrada, Date saida) {
+	public void atualizar(Date entrada, Date saida) throws DomainException{
 		Date agora = new Date();
 		if(entrada.before(agora) || saida.before(agora)) {
-			return "erro a atualização é somente para datas futuras";
+			throw new DomainException("erro a atualização é somente para datas futuras");
 		}if(!saida.after(entrada)) {
-			return "DATA INVALIDA";
+			throw new DomainException("DATA INVALIDA");
 		}
 		this.entrada = entrada;
 		this.saida = saida;
-		return null;
 	}
 
 	@Override
